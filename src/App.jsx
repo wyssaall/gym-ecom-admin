@@ -6,21 +6,29 @@ import Login from './pages/auth/Login'
 import Dashboard from './pages/dashboard/Dashboard'
 import Products from './pages/products/Products'
 import ProductOne from './pages/products/ProductOne'
-import Categories from './pages/categories/Ctegories'
+import Categories from './pages/categories/Categories'
 import Orders from './pages/orders/Orders'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Sidebar from './components/sidebar/Sidebar'
+import MainLayout from './layouts/MainLayout'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      {/* <Login /> */}
-      {/* <Dashboard/> */}
-      {/* <Products /> */}
-      {/* <ProductOne /> */}
-      {/* <Categories /> */}
-      <Orders />
-    </>
+    <Router> 
+      
+      <Routes>        
+        <Route path="/login" element={<Login />} />
+        <Route element={<MainLayout />}>
+         <Route path='/' element={<Dashboard />}></Route> 
+         <Route path='/products' element={<Products />}></Route>
+         <Route path='/products/:id' element={<ProductOne />}></Route>
+         <Route path='/categories' element={<Categories />}></Route>
+         <Route path='/orders' element={<Orders />}></Route>
+        </Route>
+         
+      </Routes>
+    </Router>
   )
 }
 

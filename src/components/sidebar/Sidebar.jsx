@@ -3,11 +3,10 @@ import { NavLink } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <div
+    <aside
       className="
-        h-screen
         w-64
-        bg-gray-900
+        bg-gray-800
         text-gray-100
         flex
         flex-col
@@ -15,80 +14,45 @@ function Sidebar() {
         p-6
       "
     >
-      {/* Logo / Title */}
+      {/* Top Section */}
       <div>
 
-        <h1 className="text-2xl font-bold mb-10 tracking-wide">
+        {/* Title */}
+        <h1 className="text-2xl font-bold mb-10 tracking-wide text-center">
           Admin Panel
         </h1>
 
         {/* Menu */}
-        <nav className="flex flex-col gap-4">
+        <nav className="flex flex-col gap-2">
 
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              `py-2 px-4 rounded-lg transition ${
-                isActive
-                  ? "bg-gray-700 font-semibold"
-                  : "hover:bg-gray-800"
-              }`
-            }
-          >
-            Dashboard
-          </NavLink>
-
-          <NavLink
-            to="/products"
-            className={({ isActive }) =>
-              `py-2 px-4 rounded-lg transition ${
-                isActive
-                  ? "bg-gray-700 font-semibold"
-                  : "hover:bg-gray-800"
-              }`
-            }
-          >
-            Produits
-          </NavLink>
-
-          <NavLink
-            to="/orders"
-            className={({ isActive }) =>
-              `py-2 px-4 rounded-lg transition ${
-                isActive
-                  ? "bg-gray-700 font-semibold"
-                  : "hover:bg-gray-800"
-              }`
-            }
-          >
-            Orders
-          </NavLink>
-
-          <NavLink
-            to="/categories"
-            className={({ isActive }) =>
-              `py-2 px-4 rounded-lg transition ${
-                isActive
-                  ? "bg-gray-700 font-semibold"
-                  : "hover:bg-gray-800"
-              }`
-            }
-          >
-            Categories
-          </NavLink>
-
-          <NavLink
-            to="/wilaya"
-            className={({ isActive }) =>
-              `py-2 px-4 rounded-lg transition ${
-                isActive
-                  ? "bg-gray-700 font-semibold"
-                  : "hover:bg-gray-800"
-              }`
-            }
-          >
-            Wilaya
-          </NavLink>
+          {[
+            { name: "Dashboard", path: "/" },
+            { name: "Produits", path: "/products" },
+            { name: "Orders", path: "/orders" },
+            { name: "Categories", path: "/categories" },
+            { name: "Wilaya", path: "/wilaya" },
+          ].map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `
+                py-2.5
+                px-4
+                rounded-lg
+                transition-all
+                duration-300
+                ${
+                  isActive
+                    ? "bg-gray-700 font-semibold shadow"
+                    : "hover:bg-gray-700/60"
+                }
+              `
+              }
+            >
+              {item.name}
+            </NavLink>
+          ))}
 
         </nav>
       </div>
@@ -96,17 +60,19 @@ function Sidebar() {
       {/* Logout */}
       <button
         className="
-          py-2 px-4
+          py-2.5
+          px-4
           rounded-lg
-          bg-red-500/10
+          bg-red-500/20
           text-red-400
-          hover:bg-red-500/20
-          transition
+          hover:bg-red-500/40
+          transition-all
+          duration-300
         "
       >
         Logout
       </button>
-    </div>
+    </aside>
   );
 }
 
