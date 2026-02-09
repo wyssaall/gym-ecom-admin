@@ -6,6 +6,7 @@ import Login from './pages/auth/Login'
 import Dashboard from './pages/dashboard/Dashboard'
 import Products from './pages/products/Products'
 import ProductOne from './pages/products/ProductOne'
+import Categories from './pages/categories/Ctegories'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,7 +16,8 @@ function App() {
       {/* <Login /> */}
       {/* <Dashboard/> */}
       {/* <Products /> */}
-      <ProductOne />
+      {/* <ProductOne /> */}
+      <Categories />
     </>
   )
 }
