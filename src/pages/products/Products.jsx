@@ -43,12 +43,12 @@ function Products() {
           </table>
         </div>
 
-        {/* Ajouter produit */}
+        {/* Ajouter produit
         <div className="mt-6 text-right">
           <button className="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition">
             Ajouter un produit
           </button>
-        </div>
+        </div> */}
     </div>
   )
 }
