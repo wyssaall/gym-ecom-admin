@@ -22,7 +22,7 @@ function App() {
         <Route element={<MainLayout />}>
          <Route path='/' element={<Dashboard />}></Route> 
          <Route path='/products' element={<Products />}></Route>
-         <Route path='/products/:id' element={<ProductOne />}></Route>
+         <Route path='/products/:productId' element={<ProductOne />}></Route>
          <Route path='/categories' element={<Categories />}></Route>
          <Route path='/orders' element={<Orders />}></Route>
         </Route>

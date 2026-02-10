@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function Products() {
   return (
@@ -34,9 +35,9 @@ function Products() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">300</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">Disponible</td>
                   <td className="px-6 py-4 whitespace-nowrap flex gap-2">
-                    <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition">Modifier</button>
-                    <button className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">Supprimer</button>
-                    <button className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-gray-600 transition">Voir</button>
+                    <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition cursor-pointer">Modifier</button>
+                    <button className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition cursor-pointer">Supprimer</button>
+                    <Link to="/:id" className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-gray-600 transition cursor-pointer">Voir</Link>
                   </td>
                </tr>
             </tbody>
