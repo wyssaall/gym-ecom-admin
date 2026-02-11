@@ -11,6 +11,7 @@ import Orders from './pages/orders/Orders'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Sidebar from './components/sidebar/Sidebar'
 import MainLayout from './layouts/MainLayout'
+import Register from './pages/auth/Register'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       
       <Routes>        
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route element={<MainLayout />}>
          <Route path='/' element={<Dashboard />}></Route> 
          <Route path='/products' element={<Products />}></Route>

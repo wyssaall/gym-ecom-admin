@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import '../../styles/index.css'
 
-function Login() {
+function Register() {
   return (
     <div className='bg-gradient-to-r from-gray-100 to-gray-600 min-h-screen flex justify-center items-center flex-col'>
 
@@ -11,14 +11,24 @@ function Login() {
 
         {/* Title */}
         <div className='text-center'>
-          <h2 className='text-3xl font-bold text-gray-800'>Admin Space</h2>
+          <h2 className='text-3xl font-bold text-gray-800'>Create Admin Account</h2>
           <p className='text-sm text-gray-500 mt-1'>
-            Welcome back! Please enter your details
+            Please fill in your information
           </p>
         </div>
 
         {/* Form */}
         <form className='flex flex-col gap-4 w-full'>
+
+          {/* Name */}
+          <div className='flex flex-col gap-2'>
+            <label className='text-sm text-gray-600'>Full Name</label>
+            <input
+              className='px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500'
+              type="text"
+              placeholder='Enter your name'
+            />
+          </div>
 
           {/* Email */}
           <div className='flex flex-col gap-2'>
@@ -36,44 +46,37 @@ function Login() {
             <input
               className='px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500'
               type="password"
-              placeholder='Enter your password'
+              placeholder='Create password'
             />
           </div>
 
-          {/* Options */}
-          <div className='flex justify-between text-sm text-gray-500'>
-
-            <div className='flex gap-2 items-center'>
-              <input type="checkbox" id="rem" />
-              <label htmlFor="rem">Remember me</label>
-            </div>
-
-            <button
-              type='button'
-              className='hover:underline'
-            >
-              Forgot password?
-            </button>
-
+          {/* Confirm Password */}
+          <div className='flex flex-col gap-2'>
+            <label className='text-sm text-gray-600'>Confirm Password</label>
+            <input
+              className='px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500'
+              type="password"
+              placeholder='Confirm password'
+            />
           </div>
 
-          {/* Login Button */}
+          {/* Register Button */}
           <button
             className='mt-4 py-2 bg-gray-800 rounded-2xl font-semibold text-white hover:bg-gray-700 transition'
           >
-            Login
+            Register
           </button>
 
         </form>
 
-        {/* Register Link */}
+        {/* Login Link */}
         <p className='text-sm text-gray-500'>
-          Don’t have an account?{' '}
+          Already have an account?{' '}
           <Link
-            to="/register"
+            to="/login"
             className='text-gray-800 font-semibold hover:underline'
           >
-            Register
+            Login
           </Link>
         </p>
 
@@ -82,4 +85,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Register

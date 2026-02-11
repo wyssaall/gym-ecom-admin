@@ -5,11 +5,13 @@ function Categories() {
   const categories = [
     {
       name: "Leggings",
-      products: ["Leggings sport femme", "Leggings yoga femme", "Leggings running homme"]
+      products: ["Leggings sport femme", "Leggings yoga femme", "Leggings running homme"],
+      nbr_produits : 300
     },
     {
       name: "T-Shirts",
-      products: ["T-shirt running homme", "T-shirt training femme"]
+      products: ["T-shirt running homme", "T-shirt training femme"],
+      nbr_produits : 200
     }
   ];
 
@@ -29,6 +31,7 @@ function Categories() {
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom catégorie</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produits</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">nombre de produits</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -45,6 +48,10 @@ function Categories() {
                     ))}
                   </div>
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                  {cat.nbr_produits}
+                </td>
+
                 <td className="px-6 py-4 whitespace-nowrap flex gap-2 flex-wrap">
                   <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition">Modifier</button>
                   <button className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">Supprimer</button>
