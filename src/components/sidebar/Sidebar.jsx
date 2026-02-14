@@ -68,6 +68,7 @@ function Sidebar() {
           hover:bg-red-500/40
           transition-all
           duration-300
+          cursor-pointer
         "
       >
         Logout

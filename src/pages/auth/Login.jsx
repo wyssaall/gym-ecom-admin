@@ -1,8 +1,30 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import '../../styles/index.css'
+import authService from '../../services/authService'
 
 function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+
+    try {
+      const data = await authService.login(email, password)
+      if (data.token) {
+        localStorage.setItem('token', data.token)
+        navigate('/')
+      }
+    } catch (err) {
+      console.error("Login failed", err)
+      setError(err.response?.data?.message || 'Invalid email or password')
+    }
+  }
+
   return (
     <div className='bg-gradient-to-r from-gray-100 to-gray-600 min-h-screen flex justify-center items-center flex-col'>
 
@@ -18,7 +40,7 @@ function Login() {
         </div>
 
         {/* Form */}
-        <form className='flex flex-col gap-4 w-full'>
+        <form className='flex flex-col gap-4 w-full' onSubmit={handleSubmit}>
 
           {/* Email */}
           <div className='flex flex-col gap-2'>
@@ -27,6 +49,9 @@ function Login() {
               className='px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500'
               type="email"
               placeholder='Enter your email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
 
@@ -37,6 +62,9 @@ function Login() {
               className='px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500'
               type="password"
               placeholder='Enter your password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
@@ -59,10 +87,13 @@ function Login() {
 
           {/* Login Button */}
           <button
+            type="submit"
             className='mt-4 py-2 bg-gray-800 rounded-2xl font-semibold text-white hover:bg-gray-700 transition'
           >
             Login
           </button>
+
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
         </form>
 
