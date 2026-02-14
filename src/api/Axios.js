@@ -26,5 +26,20 @@ api.interceptors.request.use(
     }
 );
 
+// Gérer les erreurs de réponse (ex: 401 Unauthorized)
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('token');
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
+
 export default api;
 
