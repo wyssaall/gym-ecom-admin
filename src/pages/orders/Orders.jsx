@@ -1,43 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import orderService from "../../services/OrderService";
 
 function Orders() {
-  // Exemple de données (mock)
-  const orders = [
-    {
-      id: "ORD-001",
-      customer: "Wissal Zabour",
-      phone: "0555-123-456",
-      wilaya: "Alger",
-      commune: "Bab Ezzouar",
-      address: "Rue des Fleurs 12",
-      total: 7200,
-      items: [
-        { name: "Leggings Sport Femme", quantity: 2, price: 2000, color: "Noir", size: "M" },
-        { name: "T-shirt Running Homme", quantity: 1, price: 3200, color: "Bleu", size: "L" },
-      ],
-    },
-    {
-      id: "ORD-002",
-      customer: "Salim NAIT ALI",
-      phone: "0555-987-654",
-      wilaya: "tizi ouzou",
-      commune: "tizi ouzou",
-      address: "Av. de la Liberté 5",
-      total: 5000,
-      items: [
-        { name: "Leggings Yoga Femme", quantity: 1, price: 2000, color: "Gris", size: "S" },
-        { name: "T-shirt Training Femme", quantity: 1, price: 3000, color: "Rose", size: "M" },
-      ],
-    },
-  ];
-
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [openOrders, setOpenOrders] = useState([]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const data = await orderService.getAllOrders();
+      setOrders(data);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      setError("Erreur lors de la récupération des commandes.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleOrder = (id) => {
     setOpenOrders((prev) =>
       prev.includes(id) ? prev.filter((o) => o !== id) : [...prev, id]
     );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
+        <div className="text-xl font-semibold text-gray-600">Chargement des commandes...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
+        <div className="text-xl font-semibold text-red-600">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -52,54 +60,64 @@ function Orders() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#Order</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#ID</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Détails</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {orders.map((order) => (
-              <React.Fragment key={order.id}>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.customer}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.total} DZD</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      className="text-blue-500 hover:underline"
-                      onClick={() => toggleOrder(order.id)}
-                    >
-                      {openOrders.includes(order.id) ? "⬆ Masquer" : "⬇ Voir"}
-                    </button>
-                  </td>
-                </tr>
-
-                {/* Dropdown / détails items */}
-                {openOrders.includes(order.id) && (
-                  <tr className="bg-gray-50">
-                    <td colSpan={4} className="px-6 py-4">
-                      <div className="flex flex-col gap-3">
-                        {order.items.map((item, idx) => (
-                          <div key={idx} className="flex justify-between items-center p-2 bg-white rounded-lg shadow-sm">
-                            <div className="text-gray-800 font-medium">{item.name}</div>
-                            <div className="text-gray-600 text-sm">
-                              Quantité: {item.quantity} | Prix: {item.price} DZD | Couleur: {item.color} | Taille: {item.size}
-                            </div>
-                          </div>
-                        ))}
-
-                        {/* Adresse livraison */}
-                        <div className="text-gray-600 text-sm mt-2">
-                          <span className="font-semibold">Adresse:</span> {order.address}, {order.commune}, {order.wilaya} <br />
-                          <span className="font-semibold">Téléphone:</span> {order.phone}
-                        </div>
-                      </div>
+            {orders.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-6 py-10 text-center text-gray-500">
+                  Aucune commande trouvée.
+                </td>
+              </tr>
+            ) : (
+              orders.map((order) => (
+                <React.Fragment key={order._id}>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {order._id.substring(order._id.length - 8).toUpperCase()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.customer?.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.total} DZD</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        className="text-blue-500 hover:underline"
+                        onClick={() => toggleOrder(order._id)}
+                      >
+                        {openOrders.includes(order._id) ? "⬆ Masquer" : "⬇ Voir"}
+                      </button>
                     </td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
+
+                  {/* Dropdown / détails items */}
+                  {openOrders.includes(order._id) && (
+                    <tr className="bg-gray-50">
+                      <td colSpan={4} className="px-6 py-4">
+                        <div className="flex flex-col gap-3">
+                          {order.items.map((item, idx) => (
+                            <div key={idx} className="flex justify-between items-center p-2 bg-white rounded-lg shadow-sm">
+                              <div className="text-gray-800 font-medium">{item.name}</div>
+                              <div className="text-gray-600 text-sm">
+                                Quantité: {item.quantity} | Prix: {item.price} DZD | Couleur: {item.color} | Taille: {item.size}
+                              </div>
+                            </div>
+                          ))}
+
+                          {/* Adresse livraison */}
+                          <div className="text-gray-600 text-sm mt-2">
+                            <span className="font-semibold">Adresse:</span> {order.customer?.address}, {order.customer?.commune}, {order.customer?.wilaya} <br />
+                            <span className="font-semibold">Téléphone:</span> {order.customer?.phone}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))
+            )}
           </tbody>
         </table>
       </div>
