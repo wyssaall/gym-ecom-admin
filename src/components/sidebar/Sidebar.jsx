@@ -2,9 +2,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
-  return (
-    <aside
-      className="
+    return (
+        <aside
+            className="
         w-64
         bg-gray-800
         text-gray-100
@@ -13,53 +13,52 @@ function Sidebar() {
         justify-between
         p-6
       "
-    >
-      {/* Top Section */}
-      <div>
+        >
+            {/* Top Section */}
+            <div>
 
-        {/* Title */}
-        <h1 className="text-2xl font-bold mb-10 tracking-wide text-center">
-          Admin Panel
-        </h1>
+                {/* Title */}
+                <h1 className="text-2xl font-bold mb-10 tracking-wide text-center">
+                    Admin Panel
+                </h1>
 
-        {/* Menu */}
-        <nav className="flex flex-col gap-2">
+                {/* Menu */}
+                <nav className="flex flex-col gap-2">
 
-          {[
-            { name: "Dashboard", path: "/" },
-            { name: "Produits", path: "/products" },
-            { name: "Orders", path: "/orders" },
-            { name: "Categories", path: "/categories" },
-            { name: "Wilaya", path: "/wilaya" },
-          ].map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `
+                    {[
+                        { name: "Dashboard", path: "/" },
+                        { name: "Produits", path: "/products" },
+                        { name: "Orders", path: "/orders" },
+                        { name: "Categories", path: "/categories" },
+                        { name: "Wilaya", path: "/wilaya" },
+                    ].map((item) => (
+                        <NavLink
+                            key={item.path}
+                            to={item.path}
+                            className={({ isActive }) =>
+                                `
                 py-2.5
                 px-4
                 rounded-lg
                 transition-all
                 duration-300
-                ${
-                  isActive
-                    ? "bg-gray-700 font-semibold shadow"
-                    : "hover:bg-gray-700/60"
-                }
+                ${isActive
+                                    ? "bg-gray-700 font-semibold shadow"
+                                    : "hover:bg-gray-700/60"
+                                }
               `
-              }
-            >
-              {item.name}
-            </NavLink>
-          ))}
+                            }
+                        >
+                            {item.name}
+                        </NavLink>
+                    ))}
 
-        </nav>
-      </div>
+                </nav>
+            </div>
 
-      {/* Logout */}
-      <button
-        className="
+            {/* Logout */}
+            <button
+                className="
           py-2.5
           px-4
           rounded-lg
@@ -70,11 +69,11 @@ function Sidebar() {
           duration-300
           cursor-pointer
         "
-      >
-        Logout
-      </button>
-    </aside>
-  );
+            >
+                Logout
+            </button>
+        </aside>
+    );
 }
 
 export default Sidebar;

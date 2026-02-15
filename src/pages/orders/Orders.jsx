@@ -91,7 +91,7 @@ function Orders() {
 
                         {/* Adresse livraison */}
                         <div className="text-gray-600 text-sm mt-2">
-                          <span className="font-semibold">Adresse:</span> {order.address}, {order.commune}, {order.wilaya} <br/>
+                          <span className="font-semibold">Adresse:</span> {order.address}, {order.commune}, {order.wilaya} <br />
                           <span className="font-semibold">Téléphone:</span> {order.phone}
                         </div>
                       </div>
