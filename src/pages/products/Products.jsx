@@ -158,7 +158,9 @@ function Products() {
                             products.map((product) => (
                                 <tr key={product._id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.category}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {product.category && typeof product.category === 'object' ? product.category.name : 'Sans catégorie'}
+                                    </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.price} DA</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.stock}</td>
                                     <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>

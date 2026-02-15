@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import categoryService from '../services/CategoryService'
 
 function ProductFormModal({ isOpen, onClose, onSubmit, product = null, mode = 'add' }) {
     const [formData, setFormData] = useState({
@@ -10,10 +11,29 @@ function ProductFormModal({ isOpen, onClose, onSubmit, product = null, mode = 'a
         sizes: '',
         colors: ''
     })
+    const [categories, setCategories] = useState([])
     const [images, setImages] = useState([])
     const [imagePreviews, setImagePreviews] = useState([])
     const [loading, setLoading] = useState(false)
+    const [fetchingCats, setFetchingCats] = useState(false)
     const [error, setError] = useState('')
+
+    useEffect(() => {
+        const fetchCats = async () => {
+            try {
+                setFetchingCats(true)
+                const data = await categoryService.getAllCategories()
+                setCategories(Array.isArray(data) ? data : data.categories || [])
+            } catch (err) {
+                console.error("Failed to fetch categories:", err)
+            } finally {
+                setFetchingCats(false)
+            }
+        }
+        if (isOpen) {
+            fetchCats()
+        }
+    }, [isOpen])
 
     useEffect(() => {
         setError('')
@@ -117,9 +137,6 @@ function ProductFormModal({ isOpen, onClose, onSubmit, product = null, mode = 'a
             if (formData.sizes.trim()) {
                 const sizesArray = formData.sizes.split(',').map(s => s.trim()).filter(s => s !== '')
                 sizesArray.forEach(size => submitData.append('sizes', size))
-            } else {
-                // If sizes is empty string, we can either send nothing or an empty array representation
-                // Backend usually expects multiple 'sizes' fields for an array
             }
 
             // Handle Colors
@@ -233,15 +250,20 @@ function ProductFormModal({ isOpen, onClose, onSubmit, product = null, mode = 'a
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Catégorie *
                             </label>
-                            <input
-                                type="text"
+                            <select
                                 name="category"
-                                value={formData.category}
+                                value={formData.category && typeof formData.category === 'object' ? formData.category._id : formData.category}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Ex: Leggings"
-                            />
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                            >
+                                <option value="" disabled>{fetchingCats ? 'Chargement...' : 'Sélectionner une catégorie'}</option>
+                                {categories.map(cat => (
+                                    <option key={cat._id} value={cat._id}>
+                                        {cat.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         {/* Sizes */}

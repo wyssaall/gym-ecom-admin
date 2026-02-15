@@ -1,8 +1,8 @@
 import api from "../api/Axios.js";
 
 const productService = {
-  getAllProducts: async () => {
-    const response = await api.get("/admin/products");
+  getAllProducts: async (params = {}) => {
+    const response = await api.get("/admin/products", { params });
     return response.data;
   },
   deleteProduct: async (id) => {
@@ -29,8 +29,10 @@ const productService = {
     const response = await api.get(`/admin/products/${id}`);
     return response.data;
   },
-
-
+  updateProductsCategory: async (productIds, categoryId) => {
+    const response = await api.patch("/admin/products/bulk-category", { productIds, categoryId });
+    return response.data;
+  }
 }
 
 export default productService;
