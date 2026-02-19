@@ -1,16 +1,57 @@
-# React + Vite
+# Gym-Ecom Admin Panel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive administrative interface built for managing categories, products, and orders of the Gym E-commerce platform.
 
-Currently, two official plugins are available:
+## 🚀 Technologies
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend Framework**: [React 19](https://react.dev/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **API Communication**: [Axios](https://axios-http.com/)
+- **Charts**: [Recharts](https://recharts.org/)
+- **Routing**: [React Router 7](https://reactrouter.com/)
 
-## React Compiler
+## 🛠️ Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-## Expanding the ESLint configuration
+## 📦 Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone the repository and navigate to the project directory:
+   ```bash
+   cd gym-ecom-admin
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory:
+   ```env
+   VITE_API_BASE_URL = 'http://localhost:4000/api'
+   ```
+
+## 🚀 Running the Project
+
+- **Development Server**:
+  ```bash
+  npm run dev
+  ```
+- **Build for Production**:
+  ```bash
+  npm run build
+  ```
+- **Lint**:
+  ```bash
+  npm run lint
+  ```
+
+## ✨ Key Features
+
+- **Dashboard**: Overview of business performance.
+- **Product Management**: Full CRUD operations with multi-image upload support.
+- **Category Management**: Organize products with a robust categorization system.
+- **Order Tracking**: Detailed view of customer orders and status management.
+- **Robust Error Handling**: Real-time feedback and crash prevention.

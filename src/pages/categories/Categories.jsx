@@ -15,13 +15,16 @@ function Categories() {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [categoryToEdit, setCategoryToEdit] = useState(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const baseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '');
 
     const fetchData = async () => {
         try {
             setLoading(true);
             const [catData, prodData] = await Promise.all([
                 categoryService.getAllCategories(),
-                productService.getAllProducts()
+                productService.getAllProducts({ limit: 1000 })
             ]);
 
             setCategories(Array.isArray(catData) ? catData : catData.categories || []);
@@ -52,13 +55,16 @@ function Categories() {
 
     const confirmDelete = async () => {
         try {
+            setActionLoading(true);
             await categoryService.deleteCategory(categoryToDelete._id);
             setCategories(categories.filter(c => c._id !== categoryToDelete._id));
             setShowDeleteModal(false);
             setCategoryToDelete(null);
         } catch (err) {
             console.error("Failed to delete category", err);
-            alert('Erreur lors de la suppression de la catégorie');
+            alert(`Erreur lors de la suppression: ${err.response?.data?.message || err.message}`);
+        } finally {
+            setActionLoading(false);
         }
     };
 
@@ -75,8 +81,9 @@ function Categories() {
             await fetchData();
             setShowAddModal(false);
         } catch (err) {
-            console.error("Failed to create category:", err);
-            alert(`Erreur: ${err.response?.data?.message || err.message}`);
+            console.error("Critical error in handleAddCategory:", err);
+            // Re-throw the error so CategoryFormModal's try-catch can catch it and show it in the UI
+            throw err;
         }
     };
 
@@ -99,8 +106,9 @@ function Categories() {
             setShowEditModal(false);
             setCategoryToEdit(null);
         } catch (err) {
-            console.error("Failed to update category", err);
-            alert('Erreur lors de la mise à jour');
+            console.error("Critical error in handleEditCategory:", err);
+            // Re-throw to show in modal
+            throw err;
         }
     };
 
@@ -154,7 +162,7 @@ function Categories() {
                                     <tr key={cat._id} className="hover:bg-gray-50">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <img
-                                                src={`http://localhost:5000/${cat.image}`}
+                                                src={`${baseUrl}/${cat.image}`}
                                                 alt={cat.name}
                                                 className="h-10 w-10 rounded-full object-cover shadow-sm border border-gray-200"
                                                 onError={(e) => { e.target.src = 'https://via.placeholder.com/40' }}

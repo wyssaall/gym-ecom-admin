@@ -1,7 +1,14 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import authService from "../../services/AuthService";
 
 function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    authService.logout();
+    navigate("/login", { replace: true });
+  };
     return (
         <aside
             className="
@@ -58,6 +65,8 @@ function Sidebar() {
 
             {/* Logout */}
             <button
+                type="button"
+                onClick={handleLogout}
                 className="
           py-2.5
           px-4
@@ -70,7 +79,7 @@ function Sidebar() {
           cursor-pointer
         "
             >
-                Logout
+                Déconnexion
             </button>
         </aside>
     );

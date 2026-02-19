@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../../styles/index.css'
-import authService from '../../services/authService'
+import authService from '../../services/AuthService'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -17,7 +17,7 @@ function Login() {
       const data = await authService.login(email, password)
       if (data.token) {
         localStorage.setItem('token', data.token)
-        navigate('/')
+        navigate('/', { replace: true })
       }
     } catch (err) {
       console.error("Login failed", err)

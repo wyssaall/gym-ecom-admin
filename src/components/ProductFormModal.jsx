@@ -25,7 +25,6 @@ function ProductFormModal({ isOpen, onClose, onSubmit, product = null, mode = 'a
                 const data = await categoryService.getAllCategories()
                 setCategories(Array.isArray(data) ? data : data.categories || [])
             } catch (err) {
-                console.error("Failed to fetch categories:", err)
             } finally {
                 setFetchingCats(false)
             }
@@ -131,7 +130,14 @@ function ProductFormModal({ isOpen, onClose, onSubmit, product = null, mode = 'a
             submitData.append('description', formData.description.trim())
             submitData.append('price', formData.price)
             submitData.append('stock', formData.stock)
-            submitData.append('category', formData.category.trim())
+            // Handle Category - check if it's an object (populated) or string (ID)
+            const catId = formData.category && typeof formData.category === 'object'
+                ? formData.category._id
+                : formData.category;
+
+            if (catId) {
+                submitData.append('category', catId.toString().trim())
+            }
 
             // Handle Sizes
             if (formData.sizes.trim()) {
@@ -150,11 +156,11 @@ function ProductFormModal({ isOpen, onClose, onSubmit, product = null, mode = 'a
                 submitData.append('images', image)
             })
 
+
             await onSubmit(submitData)
             onClose()
         } catch (err) {
-            console.error('Failed to submit product:', err)
-            setError(err.response?.data?.message || 'Une erreur est survenue lors de l\'enregistrement.')
+            setError(err.response?.data?.message || err.message || 'Une erreur est survenue lors de l\'enregistrement.')
         } finally {
             setLoading(false)
         }

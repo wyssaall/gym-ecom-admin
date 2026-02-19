@@ -17,9 +17,7 @@ function Products() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                console.log("Fetching products...")
                 const data = await productService.getAllProducts()
-                console.log("Products data received:", data)
 
                 // Flexible data handling: check if it's {products: [...]} or just [...]
                 if (data && Array.isArray(data.products)) {
@@ -67,11 +65,9 @@ function Products() {
 
     const handleAddProduct = async (formData) => {
         try {
-            console.log('Creating product with FormData:', formData)
             const result = await productService.createProduct(formData)
-            console.log('Product created successfully:', result)
             const data = await productService.getAllProducts()
-            setProducts(data.products)
+            setProducts(Array.isArray(data.products) ? data.products : (Array.isArray(data) ? data : []))
             setShowAddModal(false)
         } catch (err) {
             console.error("Failed to create product:", err)
@@ -89,7 +85,7 @@ function Products() {
         try {
             await productService.updateProduct(productToEdit._id, formData)
             const data = await productService.getAllProducts()
-            setProducts(data.products)
+            setProducts(Array.isArray(data.products) ? data.products : (Array.isArray(data) ? data : []))
             setShowEditModal(false)
             setProductToEdit(null)
         } catch (err) {
@@ -159,7 +155,7 @@ function Products() {
                                 <tr key={product._id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {product.category && typeof product.category === 'object' ? product.category.name : 'Sans catégorie'}
+                                        {product.category && typeof product.category === 'object' ? product.category.name : (product.category || 'Sans catégorie')}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.price} DA</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.stock}</td>

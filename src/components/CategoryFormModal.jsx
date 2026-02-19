@@ -8,7 +8,11 @@ function CategoryFormModal({ isOpen, onClose, onSubmit, category, mode }) {
     const [allProducts, setAllProducts] = useState([]);
     const [selectedProductIds, setSelectedProductIds] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+
+    const baseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -32,7 +36,8 @@ function CategoryFormModal({ isOpen, onClose, onSubmit, category, mode }) {
     useEffect(() => {
         if (mode === 'edit' && category) {
             setName(category.name || '');
-            setImagePreview(category.image ? `http://localhost:5000/${category.image}` : null);
+            const baseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '');
+            setImagePreview(category.image ? `${baseUrl}/${category.image}` : null);
             // Pre-select products that are currently in this category
             const currentProducts = allProducts.filter(p => {
                 const pCatId = p.category && typeof p.category === 'object' ? p.category._id : p.category;
@@ -69,21 +74,33 @@ function CategoryFormModal({ isOpen, onClose, onSubmit, category, mode }) {
         );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', name);
-        if (image) {
-            formData.append('image', image);
+        setError('');
+        setSubmitting(true);
+        try {
+            const formData = new FormData();
+            formData.append('name', name.trim());
+            if (image) {
+                formData.append('image', image);
+            }
+            // We pass the selected products back to the parent to handle bulk update
+            await onSubmit(formData, selectedProductIds);
+            onClose();
+        } catch (err) {
+            console.error("Failed to submit category:", err);
+            setError(err.response?.data?.message || err.message || "Une erreur est survenue.");
+        } finally {
+            setSubmitting(false);
         }
-        // We pass the selected products back to the parent to handle bulk update
-        onSubmit(formData, selectedProductIds);
     };
 
-    const filteredProducts = allProducts.filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.category?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredProducts = allProducts.filter(p => {
+        const pName = p.name?.toLowerCase() || '';
+        const pCat = (p.category && typeof p.category === 'object' ? p.category.name : p.category)?.toLowerCase() || '';
+        const search = searchQuery.toLowerCase();
+        return pName.includes(search) || pCat.includes(search);
+    });
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -107,6 +124,15 @@ function CategoryFormModal({ isOpen, onClose, onSubmit, category, mode }) {
                                     required
                                 />
                             </div>
+                        </div>
+
+                        {error && (
+                            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                                {error}
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Image</label>
                                 <input
@@ -154,13 +180,15 @@ function CategoryFormModal({ isOpen, onClose, onSubmit, category, mode }) {
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <img
-                                                        src={product.images?.[0] ? `http://localhost:5000/${product.images[0]}` : 'https://via.placeholder.com/40'}
+                                                        src={product.images?.[0] ? `${baseUrl}/${product.images[0]}` : 'https://via.placeholder.com/40'}
                                                         alt=""
                                                         className="w-8 h-8 rounded object-cover border"
                                                     />
                                                     <div>
                                                         <p className="font-semibold text-gray-800">{product.name}</p>
-                                                        <p className="text-xs text-gray-500">{product.category || 'Sans catégorie'}</p>
+                                                        <p className="text-xs text-gray-500">
+                                                            {product.category && typeof product.category === 'object' ? product.category.name : (product.category || 'Sans catégorie')}
+                                                        </p>
                                                     </div>
                                                 </div>
                                                 {selectedProductIds.includes(product._id) && (
@@ -188,9 +216,10 @@ function CategoryFormModal({ isOpen, onClose, onSubmit, category, mode }) {
                         </button>
                         <button
                             type="submit"
-                            className="px-5 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition font-medium"
+                            disabled={submitting}
+                            className="px-5 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition font-medium disabled:bg-green-300"
                         >
-                            {mode === 'add' ? 'Ajouter' : 'Enregistrer'}
+                            {submitting ? 'Chargement...' : (mode === 'add' ? 'Ajouter' : 'Enregistrer')}
                         </button>
                     </div>
                 </form>

@@ -15,7 +15,7 @@ function Orders() {
     try {
       setLoading(true);
       const data = await orderService.getAllOrders();
-      setOrders(data);
+      setOrders(Array.isArray(data) ? data : (data.orders || []));
       setError(null);
     } catch (err) {
       console.error("Error fetching orders:", err);

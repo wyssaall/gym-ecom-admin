@@ -20,7 +20,6 @@ function ProductOne() {
       setProduct(data)
       setLoading(false)
     } catch (err) {
-      console.error("Failed to fetch product:", err)
       const msg = err.response?.data?.message || err.message || "Erreur de connexion au serveur"
       setError(`Échec du chargement du produit : ${msg}`)
       setLoading(false)
@@ -50,22 +49,17 @@ function ProductOne() {
       await productService.deleteProduct(productId)
       navigate('/products') // Redirect to products list after deletion
     } catch (err) {
-      console.error("Failed to delete product", err)
       alert('Failed to delete product')
     }
   }
 
   const handleEdit = async (formData) => {
     try {
-      console.log('Updating product with ID:', productId, 'and FormData:', formData)
       const result = await productService.updateProduct(productId, formData)
-      console.log('Product updated successfully:', result)
       await fetchProduct() // Refresh product data
       setShowEditModal(false)
     } catch (err) {
-      console.error("Failed to update product:", err)
-      console.error("Error response:", err.response?.data)
-      alert(`Failed to update product: ${err.response?.data?.message || err.message}`)
+      alert(`Erreur lors de la modification : ${err.response?.data?.message || err.message}`)
     }
   }
 
@@ -158,7 +152,7 @@ function ProductOne() {
           {/* Infos produit */}
           <div className="flex flex-col gap-2 text-gray-700">
             <p><span className="font-semibold">Prix :</span> {product.price} DZD</p>
-            <p><span className="font-semibold">Catégorie :</span> {product.category}</p>
+            <p><span className="font-semibold">Catégorie :</span> {product.category && typeof product.category === 'object' ? product.category.name : product.category}</p>
             <p><span className="font-semibold">Stock :</span> {product.stock}</p>
             {product.sizes && product.sizes.length > 0 && (
               <p><span className="font-semibold">Tailles disponibles :</span> {product.sizes.join(', ')}</p>
